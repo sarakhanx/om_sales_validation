@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_route" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.route</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='route_id']" position="attributes">
+                <attribute name="optional">show</attribute>
+                <attribute name="string">เส้นทางการขนส่ง</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/form//field[@name='route_id']" position="attributes">
+                <attribute name="string">เส้นทางการขนส่ง</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo> 
