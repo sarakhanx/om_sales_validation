@@ -17,4 +17,26 @@ class SaleOrder(models.Model):
                     ('\n'.join(['- ' + line.product_id.display_name for line in lines_without_route]),
                      '\n'.join(['- ' + line.product_id.display_name for line in lines_without_route])))
         
-        return super().action_confirm() 
+        res = super().action_confirm()
+        
+        # Create and post invoice automatically after confirmation
+        for order in self:
+            if order.state == 'sale':  # Only create invoice if order is confirmed
+                invoice = order._create_invoices()
+                if invoice:
+                    # Post the invoice immediately
+                    invoice.action_post()
+                    
+                    # แก้ไขข้อความแจ้งเตือนของการยืนยันคำสั่งขาย
+                    return {
+                        'name': _('การแจ้งเตือน'),
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'warning.message.wizard',
+                        'view_mode': 'form',
+                        'target': 'new',
+                        'context': {
+                            'default_message': _('ใบแจ้งหนี้ได้ถูกสร้างขึ้นแล้ว กรุณาตรวจสอบข้อมูลการชำระเงินและทำการลงทะเบียนการชำระเงิน\n - หากไม่มียอดเรียกเก็บปลายทาง กรุณาลงทะเบียนการชำระเงินทันที\n - หากเป็นการเก็บเงินปลายทาง(COD) ไม่ต้องทำการบันทึกการชำระเงิน\n - หากเป็น Platform กรุณาทำการยืนยันการชำระเงินทันที')
+                        }
+                    }
+                    
+        return res 
