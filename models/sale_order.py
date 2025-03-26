@@ -27,16 +27,16 @@ class SaleOrder(models.Model):
                     # Post the invoice immediately
                     invoice.action_post()
                     
-                    # แก้ไขข้อความแจ้งเตือนของการยืนยันคำสั่งขาย
-                    return {
-                        'name': _('การแจ้งเตือน'),
-                        'type': 'ir.actions.act_window',
-                        'res_model': 'warning.message.wizard',
-                        'view_mode': 'form',
-                        'target': 'new',
-                        'context': {
-                            'default_message': _('ใบแจ้งหนี้ได้ถูกสร้างขึ้นแล้ว กรุณาตรวจสอบข้อมูลการชำระเงินและทำการลงทะเบียนการชำระเงิน\n - หากไม่มียอดเรียกเก็บปลายทาง กรุณาลงทะเบียนการชำระเงินทันที\n - หากเป็นการเก็บเงินปลายทาง(COD) ไม่ต้องทำการบันทึกการชำระเงิน\n - หากเป็น Platform กรุณาทำการยืนยันการชำระเงินทันที')
-                        }
-                    }
+                    # # Show warning message
+                    # return {
+                    #     'name': _('การแจ้งเตือน'),
+                    #     'type': 'ir.actions.act_window',
+                    #     'res_model': 'warning.message.wizard',
+                    #     'view_mode': 'form',
+                    #     'target': 'new',
+                    #     'context': {
+                    #         'default_message': _('ใบแจ้งหนี้ได้ถูกสร้างขึ้นแล้ว กรุณาตรวจสอบข้อมูลการชำระเงินและทำการลงทะเบียนการชำระเงิน\n - หากไม่มียอดเรียกเก็บปลายทาง กรุณาลงทะเบียนการชำระเงินทันที\n - หากเป็นการเก็บเงินปลายทาง(COD) ไม่ต้องทำการบันทึกการชำระเงิน\n - หากเป็น Platform กรุณาทำการยืนยันการชำระเงินทันที')
+                    #     }
+                    # }
                     
         return res 

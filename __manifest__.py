@@ -9,9 +9,7 @@
     """,
     'depends': ['sale_management', 'stock'],
     'data': [
-        'security/ir.model.access.csv',
         'views/sale_order_views.xml',
-        'views/warning_message_views.xml',
     ],
     'installable': True,
     'auto_install': False,
