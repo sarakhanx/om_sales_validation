@@ -1,0 +1,6 @@
+.cursor/
+.vscode/
+.idea/
+.venv/
+.env/
+.env.local/

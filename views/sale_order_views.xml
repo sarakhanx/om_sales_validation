@@ -14,4 +14,23 @@
             </xpath>
         </field>
     </record>
+    <record id="view_order_form_inherit_address_parser" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.address.parser</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="show_contact_name" invisible="1"/>
+                <field name="temp_full_address" 
+                       placeholder="วางที่อยู่ที่นี่เพื่อสร้าง Contact ใหม่ (Paste address here to create new contact)"
+                       invisible="partner_id"
+                />
+                <field name="temp_contact_name"
+                       placeholder="แก้ไขชื่อ Contact ที่นี่ (Edit contact name here)"
+                       invisible="not show_contact_name"
+                       decoration-info="1"
+                />
+            </xpath>
+        </field>
+    </record>
 </odoo> 

@@ -1,8 +1,59 @@
 from odoo import models, api, _
 from odoo.exceptions import ValidationError
+from odoo import fields
+import re
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+
+    temp_full_address = fields.Text(
+        string='Quick Address Entry',
+        help='Paste a complete address here to create a new contact'
+    )
+    
+    temp_contact_name = fields.Char(
+        string='Contact Name',
+        help='Edit the contact name here'
+    )
+    
+    show_contact_name = fields.Boolean(
+        string='Show Contact Name Field',
+        default=False
+    )
+
+    @api.onchange('temp_full_address')
+    def _onchange_temp_full_address(self):
+        if self.temp_full_address and not self.partner_id:
+            # สร้าง partner ใหม่
+            partner = self.env['res.partner'].create({
+                'name': 'New Contact',  # ชื่อเริ่มต้น
+                'full_address': self.temp_full_address,  # ใช้ฟังก์ชัน inverse ที่มีอยู่แล้ว
+                'customer_rank': 1,  # ตั้งเป็นลูกค้า
+            })
+            
+            # อัพเดทชื่อ partner ตามที่อยู่
+            if partner.street:
+                default_name = f"Customer - {partner.street}"
+                partner.name = default_name
+                self.temp_contact_name = default_name
+            
+            # กำหนด partner_id
+            self.partner_id = partner.id
+            self.temp_full_address = False  # ล้างค่าหลังจากสร้าง partner แล้ว
+            self.show_contact_name = True  # แสดงฟิลด์แก้ไขชื่อ
+            
+            # ส่งข้อความแจ้งเตือน
+            return {
+                'warning': {
+                    'title': 'Contact Created',
+                    'message': 'Contact created successfully! You can edit the contact name below.'
+                }
+            }
+
+    @api.onchange('temp_contact_name')
+    def _onchange_temp_contact_name(self):
+        if self.temp_contact_name and self.partner_id:
+            self.partner_id.name = self.temp_contact_name
 
     def action_confirm(self):
         for order in self:
