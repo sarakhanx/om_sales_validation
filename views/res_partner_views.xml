@@ -5,8 +5,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='street']" position="before">
-                <field name="full_address" placeholder="Paste the complete address here to auto-fill the fields below"/>
+            <xpath expr="//notebook" position="inside">
+                <page string="Address Parser" name="address_parser">
+                    <group>
+                        <field name="full_address" placeholder="วางที่อยู่ที่นี่เพื่อกรอกข้อมูลอัตโนมัติ (Paste address here to auto-fill)" class="mb-3" decoration-info="full_address"/>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>
